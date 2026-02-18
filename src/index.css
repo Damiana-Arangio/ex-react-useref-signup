@@ -90,3 +90,15 @@ label {
     font-weight: 600;
     color: #334155;
 }
+
+.success {
+    color: green;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+}
