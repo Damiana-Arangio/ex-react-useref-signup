@@ -1,5 +1,5 @@
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import './App.css'
 
 // Set di caratteri validi per la validazione di username e password
@@ -13,15 +13,17 @@ function App() {
   /**********
       HOOK
   ***********/
-  // Stato che rappresenta i dati controllati del form
+  // Campi controllati
   const [formData, setFormData] = useState({
-    fullName: "",
     username: "",
     password: "",
-    specializzazione: "",
-    anniEsperienza: "",
     descrizioneSviluppatore: ""
   });
+
+  // Campi non controllati
+  const fullNameRef = useRef();
+  const specializzazioneRef = useRef();
+  const anniEsperienzaRef = useRef();
 
   /*****************
       VALIDAZIONI
@@ -111,8 +113,7 @@ function App() {
             id="fullName"
             type="text"
             name="fullName"
-            value={formData.fullName}
-            onChange={handleFormData}
+            ref={fullNameRef}
           />
         </div>
 
@@ -168,8 +169,7 @@ function App() {
           <select
             id="specializzazione"
             name="specializzazione"
-            value={formData.specializzazione}
-            onChange={handleFormData}
+            ref={specializzazioneRef}
           >
             <option value="">Seleziona specializzazione</option>
             <option value="Full Stack">Full Stack</option>
@@ -185,8 +185,7 @@ function App() {
             id="anniEsperienza"
             type="number"
             name="anniEsperienza"
-            value={formData.anniEsperienza}
-            onChange={handleFormData}
+            ref={anniEsperienzaRef}
             min="1"
           />
         </div>
@@ -229,10 +228,14 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    const { fullName, username, password, specializzazione, anniEsperienza, descrizioneSviluppatore } = formData;
+    // Recupero valori input
+    const fullName = fullNameRef.current.value;
+    const specializzazione = specializzazioneRef.current.value;
+    const anniEsperienza = anniEsperienzaRef.current.value;
+    const { username, password, descrizioneSviluppatore } = formData;
 
     // Controllo campi vuoti
-    if ( !fullName || !username || !password || !specializzazione || !anniEsperienza || !descrizioneSviluppatore) {
+    if ( !fullName.trim() || !username || !password || !specializzazione || !anniEsperienza || !descrizioneSviluppatore.trim()) {
       alert("Tutti i campi sono obbligatori");
       return;
     }
@@ -249,7 +252,8 @@ function App() {
       return;
     }
 
-    console.log(formData);
+    console.log({ fullName, username, password, specializzazione, anniEsperienza, descrizioneSviluppatore});
+
   }
 
   // Funzione che gestisce gli eventi onChange del form
